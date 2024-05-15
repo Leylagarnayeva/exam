@@ -1,13 +1,24 @@
+fetch('https://restcountries.com/v3.1/name/azerbaijan')
+.then(response => response.json())
+.then(data => {
+  const countryData = data[0];
 
-        axios.get('https://restcountries.com/v3.1/name/azerbaijan')
-            .then(function (response) {
-                const data = response.data[0];
-                document.getElementById('name').textContent = data.name.common;
-                document.getElementById('flag').src = data.flags.png;
-                document.getElementById('area').textContent = data.area;
-                document.getElementById('coatOfArms').src = data.coatOfArms.png;
-                document.getElementById('capital').textContent = data.capital[0];
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+  const countryInfoDiv = document.getElementById('country-info');
+
+  const html = `
+    <h2>${countryData.name.common}</h2>
+    <p>Status: ${countryData.independent ? 'Independent' : 'Dependent'}</p>
+    <p>Territory: ${countryData.area} km²</p>
+    <p>Country: ${countryData.region}</p>
+    <p>Location: ${countryData.continents[0]}</p>
+    <p>Capital: ${countryData.capital}</p>
+    <img  src="https://mainfacts.com/media/images/coats_of_arms/az.svg" alt="gerb">
+  `;
+
+  countryInfoDiv.innerHTML = html;
+})
+.catch(error => {
+  console.error('Error fetching country data:', error);
+  const countryInfoDiv = document.getElementById('country-info');
+  countryInfoDiv.textContent = 'Error fetching country data.';
+});
